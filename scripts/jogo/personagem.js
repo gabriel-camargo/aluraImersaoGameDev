@@ -1,41 +1,87 @@
-class Personagem {
-  constructor(imagem, w = 220, h = 270) {
-    this.imagem = imagem
-    this.w = w
-    this.h = h
-    
-    this.matriz = [];
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        this.matriz.push([j*this.w, i*this.h])
-      }
-    }
-    
-    this.frameAtual=0
-  }
-
-  exibir() {
-    /**
-     * @params(imagem, posX, posY, width, height, cropX, cropY, cropWidth, cropHeight)
-     */
-    image(
-      this.imagem, 
-      0, 
-      height - (this.h / 2), 
-      (this.w / 2), 
-      (this.h / 2), 
-      this.matriz[this.frameAtual][0], 
-      this.matriz[this.frameAtual][1], 
-      this.w, 
-      this.h
+class Personagem extends Animacao {
+  constructor(
+    linhas,
+    colunas,
+    imagem,
+    posicaoTelaX,
+    posicaoTelaY,
+    largura,
+    altura,
+    larguraSprite,
+    alturaSprite
+  ) {
+    super(
+      linhas,
+      colunas,
+      imagem,
+      posicaoTelaX,
+      posicaoTelaY,
+      largura,
+      altura,
+      larguraSprite,
+      alturaSprite
     )
-    
-    this.animar()
+    this.velocidadePulo = 0
+    this.puloDuplo = false
+    this.penalidadePuloDuplo = 1.35
+
+    this.alturaPulo = 20
+    this.gravidade = 1.4
+
+    this.yInicial = this.posicaoTelaY
   }
 
-  animar() {
-    this.frameAtual++
-    
-    if(this.frameAtual >= this.matriz.length) this.frameAtual=0
+  pular() {
+    if (this.posicaoTelaY >= this.yInicial) {
+      this.velocidadePulo = -this.alturaPulo
+      this.puloDuplo = true
+
+      return 'pulo'
+    } else if (this.puloDuplo) {
+      this.velocidadePulo = -this.alturaPulo / this.penalidadePuloDuplo
+      this.puloDuplo = false
+
+      return 'pulo_duplo'
+    }
+
+    return false
+  }
+
+  aplicarGravidade() {
+    this.posicaoTelaY += this.velocidadePulo
+    this.velocidadePulo += this.gravidade
+
+    if (this.posicaoTelaY > this.yInicial) this.posicaoTelaY = this.yInicial
+  }
+
+  estaColidindo(inimigo) {
+    noFill()
+    const precisao = 0.7
+
+    rect(
+      this.posicaoTelaX,
+      this.posicaoTelaY,
+      this.largura * precisao,
+      this.altura * precisao
+    )
+    rect(
+      inimigo.posicaoTelaX,
+      inimigo.posicaoTelaY,
+      inimigo.largura * precisao,
+      inimigo.altura * precisao
+    )
+
+    const colisao = collideRectRect(
+      this.posicaoTelaX,
+      this.posicaoTelaY,
+      this.largura * precisao,
+      this.altura * precisao,
+      inimigo.posicaoTelaX,
+      inimigo.posicaoTelaY,
+      inimigo.largura * precisao,
+      inimigo.altura * precisao
+    )
+
+    return colisao
   }
 }
