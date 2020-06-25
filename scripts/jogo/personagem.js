@@ -22,17 +22,19 @@ class Personagem extends Animacao {
       alturaSprite
     )
     this.velocidadePulo = 0
+
     this.puloDuplo = false
     this.penalidadePuloDuplo = 1.35
+    this.alturaPulo = 22
+    this.gravidade = 1.2
 
-    this.alturaPulo = 20
-    this.gravidade = 1.4
+    this.posicaoTelaY -= 30
 
-    this.yInicial = this.posicaoTelaY
+    this.chao = this.posicaoTelaY
   }
 
   pular() {
-    if (this.posicaoTelaY >= this.yInicial) {
+    if (this.posicaoTelaY >= this.chao) {
       this.velocidadePulo = -this.alturaPulo
       this.puloDuplo = true
 
@@ -49,37 +51,39 @@ class Personagem extends Animacao {
 
   aplicarGravidade() {
     this.posicaoTelaY += this.velocidadePulo
-    this.velocidadePulo += this.gravidade
 
-    if (this.posicaoTelaY > this.yInicial) this.posicaoTelaY = this.yInicial
+    if (this.posicaoTelaY >= this.chao) {
+      this.posicaoTelaY = this.chao
+      this.velocidadePulo = 0
+    } else this.velocidadePulo += this.gravidade
   }
 
   estaColidindo(inimigo) {
     noFill()
-    const precisao = 0.7
+    const precisao = 0.5
 
     rect(
-      this.posicaoTelaX,
+      this.posicaoTelaX + (this.largura * precisao) / 2,
       this.posicaoTelaY,
       this.largura * precisao,
-      this.altura * precisao
+      this.altura
     )
     rect(
-      inimigo.posicaoTelaX,
+      inimigo.posicaoTelaX + (inimigo.largura * precisao) / 2,
       inimigo.posicaoTelaY,
       inimigo.largura * precisao,
-      inimigo.altura * precisao
+      inimigo.altura
     )
 
     const colisao = collideRectRect(
-      this.posicaoTelaX,
+      this.posicaoTelaX + (this.largura * precisao) / 2,
       this.posicaoTelaY,
       this.largura * precisao,
-      this.altura * precisao,
-      inimigo.posicaoTelaX,
+      this.altura,
+      inimigo.posicaoTelaX + (inimigo.largura * precisao) / 2,
       inimigo.posicaoTelaY,
       inimigo.largura * precisao,
-      inimigo.altura * precisao
+      inimigo.altura
     )
 
     return colisao

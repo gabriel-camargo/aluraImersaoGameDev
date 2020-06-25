@@ -8,7 +8,8 @@ class Animacao {
     largura,
     altura,
     larguraSprite,
-    alturaSprite
+    alturaSprite,
+    colunasExtras = -1
   ) {
     this.imagem = imagem
     this.posicaoTelaX = posicaoTelaX
@@ -22,6 +23,15 @@ class Animacao {
     for (let i = 0; i < linhas; i++) {
       for (let j = 0; j < colunas; j++) {
         this.matriz.push([j * this.larguraSprite, i * this.alturaSprite])
+      }
+    }
+
+    if (colunasExtras > 0) {
+      for (let index = 0; index < colunasExtras; index++) {
+        this.matriz.push([
+          index * this.larguraSprite,
+          linhas * this.alturaSprite
+        ])
       }
     }
 
