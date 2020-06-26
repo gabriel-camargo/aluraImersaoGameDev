@@ -10,7 +10,6 @@ class Inimigo extends Animacao {
     larguraSprite,
     alturaSprite,
     velocidade,
-    delay,
     colunasExtras = -1
   ) {
     super(
@@ -26,16 +25,15 @@ class Inimigo extends Animacao {
       colunasExtras
     )
 
-    this.delay = delay
     this.velocidade = velocidade
     this.posicaoTelaY -= 30
   }
 
   mover() {
     this.posicaoTelaX -= this.velocidade
+  }
 
-    if (this.posicaoTelaX < -this.largura - this.delay) {
-      this.posicaoTelaX = width
-    }
+  reaparecer() {
+    this.posicaoTelaX = width
   }
 }

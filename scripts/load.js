@@ -6,6 +6,8 @@ function preload() {
 
   imgPersonagem = loadImage('imagens/personagem/correndo.png')
 
+  imgVida = loadImage('imagens/assets/coracao.png')
+
   imgInimigo = loadImage('imagens/inimigos/gotinha.png')
   imgInimigoTroll = loadImage('imagens/inimigos/troll.png')
   imgInimigoVoador = loadImage('imagens/inimigos/gotinha-voadora.png')
@@ -15,4 +17,6 @@ function preload() {
   trilha = loadSound('sons/trilha_jogo.mp3')
   somPulo = loadSound('sons/pulo.wav')
   somPuloDuplo = loadSound('sons/pulo_duplo.wav')
+
+  fita = loadJSON('fita/fita.json')
 }

@@ -1,12 +1,16 @@
 class Jogo {
   constructor() {
-    this.inimigoAtual = 0
+    this.indiceAtual = 0
+    this.mapa = fita.mapa
   }
 
   setup() {
     cenario = new Cenario(imgCenario, velocidade)
-
     txtPontuacao = new Pontuacao()
+    vida = new Vida(
+      fita.configuracoes.vidaMaxima,
+      fita.configuracoes.vidaInicial
+    )
 
     personagem = new Personagem(
       4,
@@ -29,8 +33,7 @@ class Jogo {
       heightEnemy / 2,
       widthEnemy,
       heightEnemy,
-      8,
-      400
+      8
     )
     const inimigoTroll = new Inimigo(
       5,
@@ -43,7 +46,6 @@ class Jogo {
       widthEnemyTroll,
       heightEnemyTroll,
       6,
-      200,
       3
     )
     const inimigoVoador = new Inimigo(
@@ -57,7 +59,6 @@ class Jogo {
       widthEnemyFly,
       heightEnemyFly,
       10,
-      600,
       1
     )
 
@@ -81,30 +82,39 @@ class Jogo {
     cenario.exibir()
     cenario.mover()
 
+    vida.draw()
+
     txtPontuacao.exibir()
     txtPontuacao.adicionarPonto()
 
     personagem.exibir()
     personagem.aplicarGravidade()
 
-    const inimigo = inimigos[this.inimigoAtual]
+    if (vida.vidas <= 0) {
+      image(imgGameOver, width / 2 - 200, height / 3)
+      noLoop()
+    }
+
+    const linhaAtual = this.mapa[this.indiceAtual]
+
+    const inimigo = inimigos[linhaAtual.inimigo]
+    inimigo.velocidade = linhaAtual.velocidade
 
     const inimigoVisivel = inimigo.posicaoTelaX < -inimigo.largura
-
     inimigo.exibir()
     inimigo.mover()
 
     if (inimigoVisivel) {
-      this.inimigoAtual = parseInt(random(0, inimigos.length))
-      if (this.inimigoAtual >= inimigos.length) {
-        this.inimigoAtual--
+      this.indiceAtual++
+      inimigo.reaparecer()
+      if (this.indiceAtual > this.mapa.length - 1) {
+        this.indiceAtual = 0
       }
-      inimigo.velocidade = random(10, 18)
     }
 
     if (personagem.estaColidindo(inimigo)) {
-      image(imgGameOver, width / 2 - 200, height / 3)
-      // noLoop()
+      vida.perderVida()
+      personagem.tornarInvencivel()
     }
   }
 }

@@ -8,6 +8,11 @@ let imgGameOver
 let imgTelaInicial
 let fontTelaInical
 
+let vida
+let imgVida
+
+let fita
+
 let jogo
 let telaInicial
 let botaoGerenciador
@@ -21,7 +26,7 @@ let somPuloDuplo
 let txtPontuacao
 
 let cenas
-let cenaAtual = 'telaInicial'
+let cenaAtual = 'jogo'
 
 const widthWitch = 220
 const heightWitch = 270

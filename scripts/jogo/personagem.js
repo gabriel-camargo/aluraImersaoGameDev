@@ -31,6 +31,8 @@ class Personagem extends Animacao {
     this.posicaoTelaY -= 30
 
     this.chao = this.posicaoTelaY
+
+    this.invencivel = false
   }
 
   pular() {
@@ -58,6 +60,14 @@ class Personagem extends Animacao {
     } else this.velocidadePulo += this.gravidade
   }
 
+  tornarInvencivel() {
+    this.invencivel = true
+
+    setTimeout(() => {
+      this.invencivel = false
+    }, 1000)
+  }
+
   estaColidindo(inimigo) {
     noFill()
     const precisao = 0.5
@@ -74,6 +84,8 @@ class Personagem extends Animacao {
       inimigo.largura * precisao,
       inimigo.altura
     )
+
+    if (this.invencivel) return false
 
     const colisao = collideRectRect(
       this.posicaoTelaX + (this.largura * precisao) / 2,
